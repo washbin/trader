@@ -1,0 +1,40 @@
+{% extends "layout.html" %}
+
+{% block title %} Home {% endblock %}
+
+{% block main %}
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Name</th>
+      <th>Shares</th>
+      <th>Price</th>
+      <th>Total</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    {% if info %} {% for i in info %}
+    <tr>
+      <td>{{ i.symbol }}</td>
+      <td>{{ i.name }}</td>
+      <td>{{ i.shares }}</td>
+      <td>{{ i.price | usd }}</td>
+      <td>{{ (i.shares * i.price) | usd }}</td>
+    </tr>
+    {% endfor %} {% endif %}
+    <tr>
+      <td colspan="4">CASH</td>
+      <td>{{ cashown | usd }}</td>
+    </tr>
+  </tbody>
+
+  <tfoot>
+    <tr>
+      <td colspan="4"></td>
+      <td>{{ totalown | usd }}</td>
+    </tr>
+  </tfoot>
+</table>
+{% endblock %}
