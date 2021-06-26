@@ -1,9 +1,11 @@
 {% extends "layout.html" %}
 
-{% block title %} Quote {% endblock %}
-
 {% block main %}
-<form action="/quote" method="post">
+
+{% if info %}
+A share of {{ info.name }} ({{info.symbol}}) costs {{ info.price | usd }}
+{% else %}
+<form action="{{ url_for('stocks.quote') }}" method="post">
   <div class="form-group">
     <input
       autocomplete="off"
@@ -16,4 +18,5 @@
   </div>
   <button class="btn btn-primary" type="submit">Quote</button>
 </form>
-{% endblock %}
+{% endif %}
+{% endblock main %}

@@ -1,15 +1,35 @@
-import os
-
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
-app = Flask(__name__)
+from trader.settings import Config
+from trader.utils import usd
+
 
 # Configure database
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL")
-db = SQLAlchemy(app)
+db = SQLAlchemy()
+# Configure flask_login
+login_manager = LoginManager()
+login_manager.login_view = "users.login"
+login_manager.login_message_category = "info"
 
-from trader import settings
-from trader import models
-from trader import routes
+
+def create_app(config_class=Config):
+    app = Flask(__name__)
+    app.config.from_object(Config)
+    app.jinja_env.filters["usd"] = usd
+
+    db.init_app(app)
+    login_manager.init_app(app)
+
+    from trader.errors.handlers import errors
+    from trader.main.routes import main
+    from trader.stocks.routes import stocks
+    from trader.users.routes import users
+
+    app.register_blueprint(errors)
+    app.register_blueprint(main)
+    app.register_blueprint(stocks)
+    app.register_blueprint(users)
+
+    return app

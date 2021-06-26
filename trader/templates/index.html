@@ -1,7 +1,5 @@
 {% extends "layout.html" %}
 
-{% block title %} Home {% endblock %}
-
 {% block main %}
 <table class="table table-striped">
   <thead>
@@ -15,26 +13,28 @@
   </thead>
 
   <tbody>
-    {% if info %} {% for i in info %}
-    <tr>
-      <td>{{ i.symbol }}</td>
-      <td>{{ i.name }}</td>
-      <td>{{ i.shares }}</td>
-      <td>{{ i.price | usd }}</td>
-      <td>{{ (i.shares * i.price) | usd }}</td>
-    </tr>
-    {% endfor %} {% endif %}
+    {% if info %}
+      {% for i in info %}
+      <tr>
+        <td>{{ i.symbol }}</td>
+        <td>{{ i.name }}</td>
+        <td>{{ i.shares }}</td>
+        <td>{{ i.price | usd }}</td>
+        <td>{{ (i.shares * i.price) | usd }}</td>
+      </tr>
+      {% endfor %}
+    {% endif %}
     <tr>
       <td colspan="4">CASH</td>
-      <td>{{ cashown | usd }}</td>
+      <td>{{ cash_owned | usd }}</td>
     </tr>
   </tbody>
 
   <tfoot>
     <tr>
       <td colspan="4"></td>
-      <td>{{ totalown | usd }}</td>
+      <td>{{ total_owned | usd }}</td>
     </tr>
   </tfoot>
 </table>
-{% endblock %}
+{% endblock main %}

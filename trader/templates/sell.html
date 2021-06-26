@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
 
-{% block title %} Sell {% endblock %}
-
 {% block main %}
-<form action="/sell" method="post">
+<form action="{{ url_for('stocks.sell') }}" method="post">
   <div class="form-group">
     <select class="form-control" name="symbol">
       <option disabled selected value="">Symbol</option>
@@ -25,4 +23,4 @@
   <button class="btn btn-primary" type="submit">Sell</button>
 </form>
 
-{% endblock %}
+{% endblock main %}
