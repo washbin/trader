@@ -40,7 +40,7 @@ def login():
     """Log user in"""
     logout_user()
     form = LoginForm()
-    
+
     if form.validate_on_submit():
 
         # Remember which user has logged in

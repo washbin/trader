@@ -55,7 +55,7 @@ class LoginForm(FlaskForm):
         user = User.query.filter_by(username=username.data).first()
         if not user:
             raise ValidationError("User doesnot exist, please register a new one.")
-    
+
     def validate_password(self, password):
         user = User.query.filter_by(username=self.username.data).first()
         if not check_password_hash(user.hash, password.data):
