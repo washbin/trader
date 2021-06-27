@@ -1,4 +1,4 @@
-from flask import Blueprint, session
+from flask import Blueprint
 from flask.templating import render_template
 from flask_login import current_user
 from flask_login.utils import login_required
@@ -15,9 +15,9 @@ main = Blueprint("main", __name__)
 @login_required
 def index():
     """Show portfolio of stocks"""
-    cash_money = db.session.query(User).filter_by(id=current_user.id).first()
+    cash_money = User.query.filter_by(id=current_user.id).first()
     cash_money = cash_money.cash
-    all_stocks = db.session.query(Stock).filter_by(user_id=current_user.id).all()
+    all_stocks = Stock.query.filter_by(user_id=current_user.id).all()
     if not all_stocks:
         return render_template(
             "index.html",
@@ -49,5 +49,5 @@ def index():
 @login_required
 def history():
     """Show history of transactions"""
-    histfil = db.session.query(History).filter_by(user_id=current_user.id)
+    histfil = History.query.filter_by(user_id=current_user.id)
     return render_template("history.html", title="History", hist=histfil)

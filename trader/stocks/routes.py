@@ -50,31 +50,27 @@ def buy():
         if num < 1 or not stock:
             return apology("Cant process that. Check if the shares and symbol is valid")
 
-        availmon = db.session.query(User.cash).filter_by(id=current_user.id).all()
-        availmon = availmon[0]["cash"]
+        availmon = User.query.filter_by(id=current_user.id).first()
+        availmon = availmon.cash
 
         if availmon < num * stock_cost:
             return apology("Cant afford that much currently")
-        preshare = (
-            db.session.query(Stock.shares)
-            .filter_by(symbol=stock["symbol"], user_id=current_user.id)
-            .all()
-        )
+        preshare = Stock.query.filter_by(
+            symbol=stock["symbol"], user_id=current_user.id
+        ).first()
         if not preshare:
             to_add = Stock(symbol=stock["symbol"], shares=num, user_id=current_user.id)
             db.session.add(to_add)
             db.session.commit()
         else:
-            to_update = (
-                db.session.query(Stock)
-                .filter_by(symbol=stock["symbol"], user_id=current_user.id)
-                .first()
-            )
-            to_update.shares = num + preshare[0]["shares"]
+            to_update = Stock.query.filter_by(
+                symbol=stock["symbol"], user_id=current_user.id
+            ).first()
+            to_update.shares = num + preshare.shares
             db.session.commit()
 
         availmon -= num * stock_cost
-        to_update = db.session.query(User).filter_by(id=current_user.id).first()
+        to_update = User.query.filter_by(id=current_user.id).first()
         to_update.cash = availmon
         db.session.commit()
 
@@ -105,37 +101,31 @@ def sell():
         if num < 1 or not stock:
             return apology("Cant process that. Check if the shares and symbol is valid")
 
-        availmon = db.session.query(User.cash).filter_by(id=current_user.id).first()
-        availmon = availmon["cash"]
+        availmon = User.query.filter_by(id=current_user.id).first()
+        availmon = availmon.cash
 
-        preshare = (
-            db.session.query(Stock.shares)
-            .filter_by(symbol=stock["symbol"], user_id=current_user.id)
-            .first()
-        )
+        preshare = Stock.query.filter_by(
+            symbol=stock["symbol"], user_id=current_user.id
+        ).first()
         if not preshare:
             return apology("Sorry you dont own that stock", 400)
-        if num > preshare["shares"]:
+        if num > preshare.shares:
             return apology("Sorry you dont own that many stock", 400)
-        if num == preshare["shares"]:
-            to_delete = (
-                db.session.query(Stock)
-                .filter_by(symbol=stock["symbol"], user_id=current_user.id)
-                .first()
-            )
+        if num == preshare.shares:
+            to_delete = Stock.query.filter_by(
+                symbol=stock["symbol"], user_id=current_user.id
+            ).first()
             db.session.delete(to_delete)
             db.session.commit()
-        if num < preshare["shares"]:
-            to_update = (
-                db.session.query(Stock)
-                .filter_by(symbol=stock["symbol"], user_id=current_user.id)
-                .first()
-            )
-            to_update.shares = preshare["shares"] - num
+        if num < preshare.shares:
+            to_update = Stock.query.filter_by(
+                symbol=stock["symbol"], user_id=current_user.id
+            ).first()
+            to_update.shares = preshare.shares - num
             db.session.commit()
 
         availmon += num * stock_cost
-        to_update = db.session.query(User).filter_by(id=current_user.id).first()
+        to_update = User.query.filter_by(id=current_user.id).first()
         to_update.cash = availmon
         db.session.commit()
 
@@ -152,5 +142,5 @@ def sell():
         flash("Sold the stocks now you are rich!!", "success")
         return redirect(url_for("main.index"))
     else:
-        own = db.session.query(Stock.symbol).filter_by(user_id=current_user.id).all()
+        own = Stock.query.filter_by(user_id=current_user.id).all()
         return render_template("sell.html", title="Buy", stocks=own)
