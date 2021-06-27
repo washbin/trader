@@ -1,9 +1,11 @@
 from flask_wtf.form import FlaskForm
+from werkzeug.security import check_password_hash
 from wtforms.fields.core import StringField
 from wtforms.fields.simple import PasswordField, SubmitField
 from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
 
 from trader.models import User
+
 
 no_empty = "This field can not be empty"
 
@@ -13,7 +15,6 @@ class RegisterForm(FlaskForm):
         "Username",
         validators=[DataRequired(no_empty), Length(min=2, max=20)],
     )
-    # email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField(
         "Password",
         validators=[
@@ -48,5 +49,14 @@ class LoginForm(FlaskForm):
             Length(min=4, max=64, message="Password must be 4 to 64 characters long"),
         ],
     )
-    # remember = BooleanField("Remember Me")
     submit = SubmitField("Log In")
+
+    def validate_username(self, username):
+        user = User.query.filter_by(username=username.data).first()
+        if not user:
+            raise ValidationError("User doesnot exist, please register a new one.")
+    
+    def validate_password(self, password):
+        user = User.query.filter_by(username=self.username.data).first()
+        if not check_password_hash(user.hash, password.data):
+            raise ValidationError("Password doesnot match!")
