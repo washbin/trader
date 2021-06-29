@@ -97,7 +97,7 @@ def sell():
     if request.method == "POST":
         num = int(request.form.get("shares"))
         stock = lookup(request.form.get("symbol"))
-        stock_cost = int(stock["price"])
+        stock_cost = float(stock["price"])
         if num < 1 or not stock:
             return apology("Cant process that. Check if the shares and symbol is valid")
 
