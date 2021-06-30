@@ -3,9 +3,8 @@ from flask.templating import render_template
 from flask_login import current_user
 from flask_login.utils import login_required
 
-from trader import db
 from trader.models import History, Stock, User
-from trader.utils import apology, lookup
+from trader.utils import lookup
 
 
 main = Blueprint("main", __name__)
@@ -31,7 +30,16 @@ def index():
         for stock in all_stocks:
             stock_info = lookup(stock.symbol)
             if not stock_info:
-                return apology("uh oh! we have some problem here", 400)
+                return (
+                    render_template(
+                        "apology.html",
+                        title="Apology",
+                        top=400,
+                        bottom="Uh oh! We seem to have some problem here",
+                    ),
+                    400,
+                )
+
             stock_info["shares"] = int(stock.shares)
             info.append(stock_info)
             total_owned += stock_info["price"] * stock.shares

@@ -2,28 +2,35 @@
 
 {% block main %}
 <form action="{{ url_for('stocks.buy') }}" method="post">
+  {{ form.hidden_tag() }}
 
   <div class="mb-3">
-    <input
-      autocomplete="off"
-      autofocus
-      class="form-control"
-      name="symbol"
-      placeholder="Symbol"
-      type="text"
-    />
+    {% if form.symbol.errors %}
+      {{ form.symbol(class="form-control is-invalid", autofocus="true", autocomplete="off", placeholder="Symbol") }}
+      <div class="invalid-feedback">
+        {% for error in form.symbol.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% else %}
+      {{ form.symbol(class="form-control", autofocus="true", autocomplete="off", placeholder="Symbol") }}
+    {% endif %}
   </div>
 
   <div class="mb-3">
-    <input
-      class="form-control"
-      name="shares"
-      placeholder="Shares"
-      type="number"
-      min="1"
-    />
+    {% if form.shares.errors %}
+      {{ form.shares(class="form-control is-invalid", autofocus="true", autocomplete="off", placeholder="Shares") }}
+      <div class="invalid-feedback">
+        {% for error in form.shares.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% else %}
+      {{ form.shares(class="form-control", autofocus="true", autocomplete="off", placeholder="Shares") }}
+    {% endif %}
   </div>
 
-  <button class="btn btn-primary" type="submit">Buy</button>
+  {{ form.submit(class="btn btn-primary")}}
+
 </form>
 {% endblock main %}

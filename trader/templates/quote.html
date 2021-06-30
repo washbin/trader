@@ -6,19 +6,23 @@
 A share of {{ info.name }} ({{info.symbol}}) costs {{ info.price | usd }}
 {% else %}
 <form action="{{ url_for('stocks.quote') }}" method="post">
+  {{ form.hidden_tag() }}
 
   <div class="mb-3">
-    <input
-      autocomplete="off"
-      autofocus
-      class="form-control"
-      name="symbol"
-      placeholder="Symbol"
-      type="text"
-    />
+    {% if form.symbol.errors %}
+      {{ form.symbol(class="form-control is-invalid", autofocus="true", autocomplete="off", placeholder="Symbol") }}
+      <div class="invalid-feedback">
+        {% for error in form.symbol.errors %}
+        <span>{{ error }}</span>
+        {% endfor %}
+      </div>
+    {% else %}
+      {{ form.symbol(class="form-control", autofocus="true", autocomplete="off", placeholder="Symbol") }}
+    {% endif %}
   </div>
 
-  <button class="btn btn-primary" type="submit">Quote</button>
+  {{ form.submit(class="btn btn-primary")}}
+
 </form>
 {% endif %}
 {% endblock main %}

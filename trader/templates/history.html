@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for item in hist %}
+    {% for item in hist | reverse %}
     <tr>
       <td>{{ item.symbol }}</td>
       <td>{{ item.shares }}</td>

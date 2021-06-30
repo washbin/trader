@@ -7,25 +7,22 @@ from wtforms.validators import DataRequired, EqualTo, Length, ValidationError
 from trader.models import User
 
 
-no_empty = "This field can not be empty"
-
-
 class RegisterForm(FlaskForm):
     username = StringField(
         "Username",
-        validators=[DataRequired(no_empty), Length(min=2, max=20)],
+        validators=[DataRequired(), Length(min=2, max=20)],
     )
     password = PasswordField(
         "Password",
         validators=[
-            DataRequired(no_empty),
+            DataRequired(),
             Length(min=4, max=64, message="Password must be 4 to 64 characters long"),
         ],
     )
     password_confirm = PasswordField(
         "Confirm Password",
         validators=[
-            DataRequired(no_empty),
+            DataRequired(),
             EqualTo("password", message="Passwords must match"),
         ],
     )
@@ -40,12 +37,12 @@ class RegisterForm(FlaskForm):
 class LoginForm(FlaskForm):
     username = StringField(
         "Username",
-        validators=[DataRequired(no_empty), Length(min=2, max=20)],
+        validators=[DataRequired(), Length(min=2, max=20)],
     )
     password = PasswordField(
         "Password",
         validators=[
-            DataRequired(no_empty),
+            DataRequired(),
             Length(min=4, max=64, message="Password must be 4 to 64 characters long"),
         ],
     )
