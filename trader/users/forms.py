@@ -43,7 +43,6 @@ class LoginForm(FlaskForm):
         "Password",
         validators=[
             DataRequired(),
-            Length(min=4, max=64, message="Password must be 4 to 64 characters long"),
         ],
     )
     submit = SubmitField("Log In")
@@ -54,6 +53,9 @@ class LoginForm(FlaskForm):
             raise ValidationError("User doesnot exist, please register a new one.")
 
     def validate_password(self, password):
-        user = User.query.filter_by(username=self.username.data).first()
-        if not check_password_hash(user.hash, password.data):
-            raise ValidationError("Password doesnot match!")
+        try:
+            userhash = User.query.filter_by(username=self.username.data).first().hash
+            if not check_password_hash(userhash, password.data):
+                raise ValidationError("Password doesnot match!")
+        except AttributeError:
+            pass

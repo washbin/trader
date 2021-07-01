@@ -14,8 +14,7 @@ main = Blueprint("main", __name__)
 @login_required
 def index():
     """Show portfolio of stocks"""
-    cash_money = User.query.filter_by(id=current_user.id).first()
-    cash_money = cash_money.cash
+    cash_money = User.query.filter_by(id=current_user.id).first().cash
     all_stocks = Stock.query.filter_by(user_id=current_user.id).all()
     if not all_stocks:
         return render_template(
@@ -29,17 +28,6 @@ def index():
         info = []
         for stock in all_stocks:
             stock_info = lookup(stock.symbol)
-            if not stock_info:
-                return (
-                    render_template(
-                        "apology.html",
-                        title="Apology",
-                        top=400,
-                        bottom="Uh oh! We seem to have some problem here",
-                    ),
-                    400,
-                )
-
             stock_info["shares"] = int(stock.shares)
             info.append(stock_info)
             total_owned += stock_info["price"] * stock.shares

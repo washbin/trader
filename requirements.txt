@@ -1,3 +1,5 @@
+psycopg2
+gunicorn
 certifi==2021.5.30
 chardet==4.0.0
 click==8.0.1

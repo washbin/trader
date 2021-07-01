@@ -16,4 +16,4 @@ def error_404(error):
 
 @errors.app_errorhandler(500)
 def error_500(error):
-    return render_template("errors/500.html", title="400"), 500
+    return render_template("errors/500.html", title="500"), 500
