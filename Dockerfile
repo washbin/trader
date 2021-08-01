@@ -1,7 +1,7 @@
-FROM python:3.9.5
+# syntax=docker/dockerfile:1
+FROM python:3.9.5-slim-buster
 
 WORKDIR /app
-
 COPY requirements.txt ./
 
 RUN python -m pip install --upgrade pip
