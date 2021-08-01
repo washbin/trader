@@ -6,3 +6,7 @@ __pycache__/
 *.pyc
 *.py.swp
 *.db
+.github/
+nginx/
+docker-compose*
+template.env

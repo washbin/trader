@@ -8,7 +8,7 @@ RUN python -m pip install --upgrade pip
 RUN pip install -r requirements.txt
 
 COPY . .
-RUN flask db upgrade
+RUN chmod u+x ./entrypoint.sh
 
 EXPOSE 5000
-CMD [ "python", "run.py" ]
+CMD ["./entrypoint.sh"]
