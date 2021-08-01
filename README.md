@@ -15,29 +15,6 @@ A stock trading simulation app created using python flask framework<br>
   > - View info about SECRET_KEY at [Flask documentation](https://flask.palletsprojects.com/en/2.0.x/config/#SECRET_KEY)<br>
   > - DATABASE_URL as the name suggests just points to your database, for development you could use something simple like `DATABASE_URL="sqlite:///local.db"`
 
-### Initializing database
-
-During first run of both development and deployment part, follow these after step 1
-
-- Locate the flask container by doing `docker ps -a` <br>
-  > The container is likely named `trader_flask-app_1` <br>
-- Do a `docker exec -it {your container name} /bin/bash` <br>
-  > You should be inside the container shell now so type
-- ```sh
-    export FLASK_APP=run.py
-    flask shell
-  ```
-
-  > You should be prompted at a python REPL now
-
-- ```py
-    from trader import db
-    db.create_all()
-    exit()
-  ```
-
-  > Now the database initialization phase is complete so type exit to exit out of container shell and go back into your host shell
-
 ## Development
 
 1. Do a `docker-compose up -d`
