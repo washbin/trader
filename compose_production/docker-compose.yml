@@ -17,19 +17,20 @@ services:
       - postgres-data:/var/lib/postgresql/data
 
   flask-app:
-    build: .
+    build: ../main_app/
     restart: always
     expose:
       - 5000
     depends_on:
       - postgres-db
     env_file:
-      - .env
+      - ../.env
     environment:
       DATABASE_URL: postgresql+psycopg2://newuser:newpass@postgres-db:5432/docker
+    command: ["./docker_entrypoints/prod.sh"]
 
   nginx-proxy:
-    build: ./nginx
+    build: ./nginx/
     restart: always
     ports:
       - 80:80
