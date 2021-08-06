@@ -30,7 +30,7 @@ A stock trading simulation app created using python flask framework<br>
 > hide postgres credintials from compose_production/docker-compose.yml file.
 
 1. Change directory into the compose_prduction directory
-2. Do a `docker-compose -f docker-compose-prod.yml up -d`
+2. Do a `docker-compose -f docker-compose.yml up -d`
 3. Your site should now be served at port 80 in your ip.
 
 # Acknowledgments
